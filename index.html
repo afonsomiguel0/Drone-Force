@@ -1,0 +1,643 @@
+<!-- 
+    INSTITUTO SUPERIOR - ISLA GAIA
+    LICENCIATURA EM ENGENHARIA INFORMÁTICA
+    UNIDADE CURRICULAR: PROGRAMAÇÃO WEB I
+    
+    TRABALHO PRÁTICO: Website Institucional "DroneForce"
+    
+    GRUPO DE TRABALHO:
+    - Afonso Constâncio (Nº Aluno:a22510549)
+    - Diogo Almeida (Nº Aluno: XXXXX)
+    
+    DATA: Dezembro 2025
+-->
+
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DroneForce | Projeto Académico</title>
+    
+    <!-- Bootstrap CSS (CDN) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome para icones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Fontes Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* =========================================
+           ESTILOS GERAIS
+           ========================================= */
+        
+        :root {
+            --cor-verde: #2E7D32; 
+            --cor-texto: #333333;
+            --cor-fundo: #ffffff;
+            --cor-cinza-claro: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--cor-texto);
+            background-color: var(--cor-fundo);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 70px;
+        }
+
+        h1, h2, h3, h4, h5 {
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        /* Classe para esconder as páginas (Lógica JS) */
+        .escondido { 
+            display: none !important; 
+        }
+
+        /* =========================================
+           BARRA DE NAVEGAÇÃO
+           ========================================= */
+        .navbar {
+            background-color: #ffffff;
+            border-bottom: 2px solid var(--cor-verde);
+        }
+        
+        .navbar-brand {
+            color: var(--cor-verde) !important;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
+            color: #555;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .nav-link:hover, .nav-link.active {
+            color: var(--cor-verde) !important;
+            text-decoration: underline;
+        }
+
+        /* =========================================
+           SECÇÃO HERO (CAPA)
+           ========================================= */
+        .hero-section {
+            /* Imagem de fundo realista */
+            background-image: url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+            padding: 120px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        /* Película escura */
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        /* Caixa de texto */
+        .hero-box {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border-radius: 5px;
+            color: white;
+            display: inline-block;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-mini {
+            background-color: var(--cor-cinza-claro);
+            padding: 40px 0;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 30px;
+        }
+
+        /* =========================================
+           COMPONENTES
+           ========================================= */
+        
+        .card-personalizado {
+            background: white;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            height: 100%;
+        }
+
+        .calculadora-box {
+            background-color: var(--cor-cinza-claro);
+            border: 1px solid #ccc;
+            padding: 30px;
+            border-radius: 5px;
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            margin-top: auto;
+            border-top: 4px solid var(--cor-verde);
+        }
+        
+        /* Botão Topo */
+        #btn-topo {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Imagens Responsivas */
+        .img-conteudo {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            padding: 5px;
+            background: white;
+        }
+
+        /* Carrossel */
+        .carousel-item img {
+            height: 500px;
+            object-fit: cover;
+        }
+        
+        .carousel-caption {
+            background-color: rgba(0,0,0,0.8);
+            border-radius: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- MENU DE NAVEGAÇÃO -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="mudarPagina('home')">
+                <i class="fas fa-drone me-2"></i>DRONEFORCE
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse justify-content-end" id="menuPrincipal">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" onclick="mudarPagina('home')" id="link-home">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="mudarPagina('problema')" id="link-problema">Problema</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="mudarPagina('solucao')" id="link-solucao">Solução</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="mudarPagina('metodologia')" id="link-metodologia">Metodologia</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="mudarPagina('equipa')" id="link-equipa">Equipa</a></li>
+                    <li class="nav-item"><a class="nav-link" onclick="mudarPagina('contactos')" id="link-contactos">Contactos</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ÁREA PRINCIPAL -->
+    <main id="conteudo-principal">
+        
+        <!-- PÁGINA 1: INÍCIO -->
+        <div id="seccao-home">
+            <header class="hero-section text-center">
+                <div class="container">
+                    <div class="hero-box">
+                        <span class="badge bg-warning text-dark mb-2">PROJETO ACADÉMICO</span>
+                        <h1 class="display-4 fw-bold">Reflorestação Inteligente</h1>
+                        <p class="lead">Uso de drones e tecnologia para recuperar áreas ardidas.</p>
+                        <hr class="my-4" style="border-color: white;">
+                        <button onclick="mudarPagina('solucao')" class="btn btn-success btn-lg">Ver Projeto</button>
+                    </div>
+                </div>
+            </header>
+
+            <section class="container py-5">
+                <div class="row g-4 text-center mb-5">
+                    <div class="col-md-4">
+                        <div class="card-personalizado">
+                            <i class="fas fa-tree fa-3x text-success mb-3"></i>
+                            <h3>Rapidez</h3>
+                            <p>O sistema permite plantar árvores muito mais rápido que o método manual.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-personalizado">
+                            <i class="fas fa-robot fa-3x text-success mb-3"></i>
+                            <h3>Autonomia</h3>
+                            <p>Os drones voam sozinhos usando coordenadas GPS pré-definidas.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card-personalizado">
+                            <i class="fas fa-shield-alt fa-3x text-success mb-3"></i>
+                            <h3>Segurança</h3>
+                            <p>Não é preciso colocar pessoas em zonas de difícil acesso.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="calculadora-box text-center">
+                    <h2 class="mb-4">Simulador de Impacto</h2>
+                    <p>Arraste para simular a plantação:</p>
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <label class="fs-4 fw-bold text-success"><span id="mostrador-arvores">5000</span> Árvores</label>
+                            <input type="range" class="form-range my-3" min="1000" max="50000" step="1000" id="input-range" value="5000">
+                            
+                            <div class="row mt-4">
+                                <div class="col-6 border-end border-secondary">
+                                    <h3><span id="resultado-co2">125</span> t</h3>
+                                    <small>CO2 Retido</small>
+                                </div>
+                                <div class="col-6">
+                                    <h3><span id="resultado-area">5</span> ha</h3>
+                                    <small>Área Coberta</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PÁGINA 2: PROBLEMA -->
+        <div id="seccao-problema" class="escondido">
+            <div class="hero-mini">
+                <div class="container">
+                    <h1>O Problema</h1>
+                    <p class="text-muted">Contextualização do projeto.</p>
+                </div>
+            </div>
+            <section class="container mb-5">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <h2 class="text-danger">Incêndios em Portugal</h2>
+                        <p class="mt-3">Portugal sofre anualmente com incêndios florestais. A recuperação é lenta porque:</p>
+                        <ul>
+                            <li>Os terrenos são muito inclinados.</li>
+                            <li>É perigoso para trabalhadores.</li>
+                            <li>O custo da mão de obra é elevado.</li>
+                        </ul>
+                        <div class="alert alert-warning">
+                            <strong>Nota:</strong> Em 2017 arderam cerca de 500.000 hectares.
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-personalizado h-100">
+                            <h4 class="text-center mb-4">Comparação de Eficiência (Diária)</h4>
+                            <div class="row text-center align-items-center">
+                                <div class="col-5">
+                                    <i class="fas fa-walking fa-2x text-muted mb-2"></i>
+                                    <h3 class="text-muted fw-bold">2 ha</h3>
+                                    <small class="text-uppercase" style="font-size: 0.75rem;">Manual</small>
+                                </div>
+                                <div class="col-2">
+                                    <span class="text-muted fw-bold">VS</span>
+                                </div>
+                                <div class="col-5">
+                                    <i class="fas fa-plane fa-2x text-success mb-2"></i>
+                                    <h3 class="text-success fw-bold">50 ha</h3>
+                                    <small class="text-uppercase" style="font-size: 0.75rem;">DroneForce</small>
+                                </div>
+                            </div>
+                            <div class="mt-4 text-center bg-light p-2 rounded border">
+                                <span class="fw-bold text-success"><i class="fas fa-bolt me-1"></i> 25x Mais Rápido</span>
+                            </div>
+                            <p class="mt-3 small text-muted text-center fst-italic">
+                                *Estimativa baseada em capacidade de voo contínuo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PÁGINA 3: SOLUÇÃO -->
+        <div id="seccao-solucao" class="escondido">
+            <div class="hero-mini">
+                <div class="container">
+                    <h1>A Solução Técnica</h1>
+                    <p class="text-muted">Hardware e Software.</p>
+                </div>
+            </div>
+            <section class="container mb-5">
+                <div class="row mb-5">
+                    <div class="col-md-6">
+                        <img src="https://images.unsplash.com/photo-1473968512647-3e447244af8f?q=80&w=800" class="img-conteudo" alt="Drone Industrial">
+                    </div>
+                    <div class="col-md-6">
+                        <h3 class="text-success">O Drone DF-X1</h3>
+                        <p>O drone foi desenhado para carregar peso e disparar sementes. Utilizamos modelos hexacopteros para maior estabilidade.</p>
+                        
+                        <table class="table table-striped table-bordered mt-3">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Característica</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Autonomia</td><td>45 Minutos</td></tr>
+                                <tr><td>Carga Útil</td><td>15kg</td></tr>
+                                <tr><td>Velocidade</td><td>10 m/s</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row mb-5">
+                    <div class="col-md-6 order-md-2">
+                        <img src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?q=80&w=800" class="img-conteudo" alt="Bio Cápsula">
+                    </div>
+                    <div class="col-md-6 order-md-1">
+                        <h3 class="text-success">Bio-Cápsulas</h3>
+                        <p>As sementes são encapsuladas num composto especial para aumentar a taxa de sobrevivência em solos queimados.</p>
+                        <ul>
+                            <li>Hidrogel para reter água.</li>
+                            <li>Nutrientes iniciais.</li>
+                            <li>Proteção contra animais.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Perguntas Frequentes</h3>
+                <div class="accordion" id="accordionFaq">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                O drone funciona com chuva?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                Sim, tem proteção básica (IP54), mas evitamos voar com chuva forte.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                Que árvores usam?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#accordionFaq">
+                            <div class="accordion-body">
+                                Pinheiro Bravo, Sobreiro e Carvalho.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PÁGINA 4: METODOLOGIA -->
+        <div id="seccao-metodologia" class="escondido">
+            <div class="hero-mini">
+                <div class="container">
+                    <h1>Metodologia</h1>
+                    <p class="text-muted">Como funciona o processo.</p>
+                </div>
+            </div>
+            <section class="container mb-5">
+                
+                <!-- Carrossel de Imagens -->
+                <div id="meuCarrossel" class="carousel slide mb-5" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#meuCarrossel" data-bs-slide-to="0" class="active"></button>
+                        <button type="button" data-bs-target="#meuCarrossel" data-bs-slide-to="1"></button>
+                        <button type="button" data-bs-target="#meuCarrossel" data-bs-slide-to="2"></button>
+                        <button type="button" data-bs-target="#meuCarrossel" data-bs-slide-to="3"></button>
+                        <button type="button" data-bs-target="#meuCarrossel" data-bs-slide-to="4"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img src="https://images.unsplash.com/photo-1506947411487-a56738267384?q=80&w=1600" class="d-block w-100" alt="Mapeamento">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Fase 1: Mapeamento Aéreo</h5>
+                                <p>Recolha de dados topográficos do terreno.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1600" class="d-block w-100" alt="Análise">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Fase 2: Análise de Dados</h5>
+                                <p>Processamento da informação para criar a grid de voo.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=1600" class="d-block w-100" alt="Planeamento">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Fase 3: Planeamento Algorítmico</h5>
+                                <p>O algoritmo define os locais exatos.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://images.unsplash.com/photo-1527977966376-1c8408f9f108?q=80&w=1600" class="d-block w-100" alt="Disparo">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Fase 4: Disparo das Sementes</h5>
+                                <p>Execução do voo e libertação das cápsulas.</p>
+                            </div>
+                        </div>
+                        <div class="carousel-item">
+                            <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?q=80&w=1600" class="d-block w-100" alt="Crescimento">
+                            <div class="carousel-caption d-none d-md-block">
+                                <h5>Fase 5: Crescimento</h5>
+                                <p>Monitorização da recuperação da floresta.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#meuCarrossel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#meuCarrossel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- PÁGINA 5: EQUIPA -->
+        <div id="seccao-equipa" class="escondido">
+            <div class="hero-mini">
+                <div class="container">
+                    <h1>A Equipa</h1>
+                    <p class="text-muted">Estudantes do ISLA Gaia.</p>
+                </div>
+            </div>
+            <section class="container mb-5 text-center">
+                <div class="row justify-content-center g-4">
+                    <div class="col-md-5">
+                        <div class="card-personalizado">
+                            <div class="mb-3">
+                                <i class="fas fa-user fa-3x text-secondary"></i>
+                            </div>
+                            <h4>Afonso Constâncio</h4>
+                            <p class="text-success fw-bold">Implementação JavaScript</p>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card-personalizado">
+                            <div class="mb-3">
+                                <i class="fas fa-user fa-3x text-secondary"></i>
+                            </div>
+                            <h4>Diogo Almeida</h4>
+                            <p class="text-success fw-bold">Interface & CSS</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 class="mt-5 mb-3">Parceiros e Apoios</h4>
+                <div class="row justify-content-center g-3">
+                    <div class="col-lg-2 col-md-4 col-6"><div class="border p-2 bg-white h-100 d-flex align-items-center justify-content-center">PT 2030</div></div>
+                    <div class="col-lg-2 col-md-4 col-6"><div class="border p-2 bg-white h-100 d-flex align-items-center justify-content-center">ISLA Gaia</div></div>
+                    <div class="col-lg-2 col-md-4 col-6"><div class="border p-2 bg-white h-100 d-flex align-items-center justify-content-center">ICNF</div></div>
+                    <div class="col-lg-2 col-md-4 col-6"><div class="border p-2 bg-white h-100 d-flex align-items-center justify-content-center">GeoSense Analytics</div></div>
+                    <div class="col-lg-3 col-md-4 col-6"><div class="border p-2 bg-white h-100 d-flex align-items-center justify-content-center">GreenFuture Investments</div></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- PÁGINA 6: CONTACTOS -->
+        <div id="seccao-contactos" class="escondido">
+            <div class="hero-mini bg-dark">
+                <div class="container">
+                    <h1>Contactos</h1>
+                </div>
+            </div>
+            <section class="container mb-5">
+                <div class="row">
+                    <div class="col-lg-6 mb-4">
+                        <h3>Informações</h3>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Rua da Bélgica 234, Gaia</li>
+                            <li class="mb-2"><i class="fas fa-envelope me-2"></i> grupo01@alunos.isla.pt</li>
+                        </ul>
+                        <!-- Mapa Google -->
+                        <div class="border p-1 bg-white">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3005.106263536838!2d-8.624734923678077!3d41.13217467133334!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd24652610e74e41%3A0xc3124802c6742580!2sISLA%20Gaia!5e0!3m2!1spt-PT!2spt!4v1700000000000" width="100%" height="250" style="border:0;" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="card-personalizado">
+                            <h3>Formulário</h3>
+                            <form id="formularioContacto">
+                                <div class="mb-3">
+                                    <label class="form-label">Nome:</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email:</label>
+                                    <input type="email" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Mensagem:</label>
+                                    <textarea class="form-control" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">Enviar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- Botão Topo -->
+    <button id="btn-topo" class="btn btn-secondary" onclick="window.scrollTo(0,0)"><i class="fas fa-arrow-up"></i></button>
+
+    <!-- Rodapé -->
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">&copy; <span id="anoAtual"></span> DroneForce - Projeto Académico Programação Web</p>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // 1. Atualizar Ano
+        document.getElementById('anoAtual').textContent = new Date().getFullYear();
+
+        // 2. Navegação (Esconder/Mostrar Divs)
+        function mudarPagina(idPagina) {
+            // Esconder todas
+            var seccoes = document.querySelectorAll('[id^="seccao-"]');
+            for (var i = 0; i < seccoes.length; i++) {
+                seccoes[i].classList.add('escondido');
+            }
+
+            // Mostrar a selecionada
+            var alvo = document.getElementById('seccao-' + idPagina);
+            if (alvo) {
+                alvo.classList.remove('escondido');
+            }
+
+            // Atualizar menu
+            var links = document.querySelectorAll('.nav-link');
+            for (var i = 0; i < links.length; i++) {
+                links[i].classList.remove('active');
+            }
+            var linkAtivo = document.getElementById('link-' + idPagina);
+            if (linkAtivo) linkAtivo.classList.add('active');
+
+            // Fechar menu mobile
+            var menu = document.getElementById('menuPrincipal');
+            var bsCollapse = new bootstrap.Collapse(menu, {toggle: false});
+            bsCollapse.hide();
+        }
+
+        // 3. Calculadora
+        var slider = document.getElementById('input-range');
+        if (slider) {
+            slider.addEventListener('input', function() {
+                var valor = this.value;
+                document.getElementById('mostrador-arvores').innerText = valor;
+                // Contas simples para o trabalho
+                document.getElementById('resultado-co2').innerText = Math.round(valor * 0.025);
+                document.getElementById('resultado-area').innerText = Math.round(valor / 1000);
+            });
+        }
+
+        // 4. Botão Topo
+        var btn = document.getElementById("btn-topo");
+        window.onscroll = function() {
+            if (document.documentElement.scrollTop > 100) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+
+        // 5. Formulário
+        var form = document.getElementById('formularioContacto');
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                alert('Mensagem enviada (Simulação)!');
+                form.reset();
+            });
+        }
+    </script>
+</body>
+</html>
