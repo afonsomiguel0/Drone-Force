@@ -1,37 +1,21 @@
-/* =========================================
-   ESTILOS GERAIS
-   ========================================= */
-
+/* Variáveis de cores */
 :root {
-    --cor-verde: #2E7D32; 
+    --cor-verde: #2E7D32;
     --cor-texto: #333333;
-    --cor-fundo: #ffffff;
-    --cor-cinza-claro: #f8f9fa;
+    --bg-claro: #f8f9fa;
 }
 
 body {
     font-family: 'Open Sans', sans-serif;
     color: var(--cor-texto);
-    background-color: var(--cor-fundo);
+    /* Padding top necessário porque a navbar é fixed-top */
+    padding-top: 70px; 
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-top: 70px;
 }
 
-h1, h2, h3, h4, h5 {
-    font-weight: 700;
-    color: #1a1a1a;
-}
-
-/* Classe para esconder as páginas (Lógica JS) */
-.escondido { 
-    display: none !important; 
-}
-
-/* =========================================
-   BARRA DE NAVEGAÇÃO
-   ========================================= */
+/* --- Barra de Navegação --- */
 .navbar {
     background-color: #ffffff;
     border-bottom: 2px solid var(--cor-verde);
@@ -46,6 +30,7 @@ h1, h2, h3, h4, h5 {
 .nav-link {
     color: #555;
     font-weight: 600;
+    cursor: pointer; /* Importante para as tags <a> sem href real */
 }
 
 .nav-link:hover, .nav-link.active {
@@ -53,20 +38,25 @@ h1, h2, h3, h4, h5 {
     text-decoration: underline;
 }
 
-/* =========================================
-   SECÇÃO HERO (CAPA)
-   ========================================= */
+/* Classe para esconder as secções (Lógica JS) */
+.escondido { 
+    display: none !important; 
+}
+
+/* --- Capa (Hero Section) --- */
 .hero-section {
-    /* Imagem de fundo realista */
-    background-image: url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?q=80&w=1920');
+    /* Imagem de fundo */
+    background-image: url('img/fundo-hero.jpg');
     background-size: cover;
-    background-position: center;
+    background-position: center center; /* Foca o centro da imagem */
+    background-attachment: fixed; /* A imagem fica parada enquanto faz scroll */
     padding: 120px 0;
     margin-bottom: 30px;
     position: relative;
 }
 
-/* Película escura */
+
+/* Filtro escuro para o texto ler-se melhor */
 .hero-section::before {
     content: "";
     position: absolute;
@@ -74,62 +64,43 @@ h1, h2, h3, h4, h5 {
     background: rgba(0,0,0,0.5);
 }
 
-/* Caixa de texto */
 .hero-box {
     background-color: rgba(0, 0, 0, 0.7);
     padding: 30px;
     border-radius: 5px;
     color: white;
     display: inline-block;
-    position: relative;
+    position: relative; /* Para ficar acima do filtro */
     z-index: 1;
 }
 
+/* Header pequeno para as outras páginas */
 .hero-mini {
-    background-color: var(--cor-cinza-claro);
+    background-color: var(--bg-claro);
     padding: 40px 0;
     border-bottom: 1px solid #ddd;
     margin-bottom: 30px;
+    border-radius: 15px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
 }
 
-/* =========================================
-   COMPONENTES
-   ========================================= */
-
+/* --- Componentes --- */
 .card-personalizado {
     background: white;
     padding: 20px;
     border: 1px solid #dee2e6;
     border-radius: 5px;
-    height: 100%;
+    height: 100%; /* Garante que os cards têm a mesma altura */
 }
 
 .calculadora-box {
-    background-color: var(--cor-cinza-claro);
+    background-color: var(--bg-claro);
     border: 1px solid #ccc;
     padding: 30px;
     border-radius: 5px;
 }
 
-/* Rodapé */
-footer {
-    background-color: #343a40;
-    color: white;
-    padding: 20px 0;
-    margin-top: auto;
-    border-top: 4px solid var(--cor-verde);
-}
-
-/* Botão Topo */
-#btn-topo {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    display: none;
-    z-index: 1000;
-}
-
-/* Imagens Responsivas */
+/* Imagens de conteúdo */
 .img-conteudo {
     width: 100%;
     height: 300px;
@@ -140,18 +111,51 @@ footer {
     background: white;
 }
 
-/* Carrossel */
+/* Ajustes do Carrossel */
 .carousel-item img {
     height: 500px;
-    object-fit: cover;
+    object-fit: cover;      
+    object-position: center; 
+    width: 100%;            
 }
 
+
 .carousel-caption {
-    background-color: rgba(0,0,0,0.8);
-    border-radius: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px;
-    width: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Fundo preto 70% opaco */
+    border-radius: 10px;                  /* Cantos arredondados */
+    padding: 20px;                        /* Espaço à volta do texto */
+    bottom: 40px;                         /* Sobe a caixa um bocadinho */
+    max-width: 600px;                     /* Impede que fique demasiado larga */
+    margin: 0 auto;                       /* Centra a caixa horizontalmente */
+    left: 0; right: 0;                    /* Garante o centramento absoluto */
+}
+
+/* --- Rodapé --- */
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 20px 0;
+    margin-top: auto;
+    border-top: 4px solid var(--cor-verde);
+}
+
+/* Botão voltar ao topo */
+#btn-topo {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    z-index: 1000;
+}
+
+/* Forçar o botão a usar o nosso verde específico e não o do Bootstrap */
+.btn-success {
+    background-color: var(--cor-verde) !important;
+    border-color: var(--cor-verde) !important;
+}
+
+.btn-success:hover {
+    /* Um verde ligeiramente mais escuro para quando passas o rato */
+    background-color: #1b5e20 !important; 
+    border-color: #1b5e20 !important;
 }
